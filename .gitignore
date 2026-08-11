@@ -7,6 +7,13 @@ __pycache__/
 *.so
 
 # =========================
+# Data
+# =========================
+data/raw/
+data/interim/
+data/processed/
+
+# =========================
 # Virtual Environment
 # =========================
 .venv/
