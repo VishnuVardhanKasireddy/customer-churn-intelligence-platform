@@ -23,3 +23,5 @@ def process_data():
     print(f"Customers: {clean_df['customer_id'].nunique():,}")
     
     return clean_df
+
+

@@ -9,6 +9,7 @@ PROCESSED_DATA_DIR = DATA_DIR / "processed"
 
 RAW_DATA_FILE = RAW_DATA_DIR / "online_retail_II.xlsx"
 CLEAN_DATA_FILE = PROCESSED_DATA_DIR / "cleaned_retail.csv"
+FEATURE_DATA_FILE = PROCESSED_DATA_DIR / "customer_churn_features.csv"
 
 EXPECTED_SHEETS = ["Year 2009-2010","Year 2010-2011"]
 
