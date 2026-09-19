@@ -11,6 +11,13 @@ RAW_DATA_FILE = RAW_DATA_DIR / "online_retail_II.xlsx"
 CLEAN_DATA_FILE = PROCESSED_DATA_DIR / "cleaned_retail.csv"
 FEATURE_DATA_FILE = PROCESSED_DATA_DIR / "customer_churn_features.csv"
 
+TRAIN_DATA_FILE = PROCESSED_DATA_DIR / "train.csv"
+VALIDATION_DATA_FILE = PROCESSED_DATA_DIR / "validation.csv"
+TEST_DATA_FILE = PROCESSED_DATA_DIR / "test.csv"
+
+ARTIFACTS_DIR = PROJECT_ROOT / "artifacts"
+MODEL_FILE = ARTIFACTS_DIR / "random_forest.joblib"
+
 EXPECTED_SHEETS = ["Year 2009-2010","Year 2010-2011"]
 
 EXPECTED_COLUMNS = [
