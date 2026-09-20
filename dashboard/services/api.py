@@ -1,6 +1,6 @@
 import requests
 
-from dashboard.dashboard_config import API_BASE_URL
+from dashboard_config import API_BASE_URL
 
 
 def predict_churn(features: dict) -> dict:
