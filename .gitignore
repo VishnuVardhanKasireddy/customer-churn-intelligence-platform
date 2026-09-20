@@ -74,11 +74,7 @@ mlruns/
 # =========================
 # Model Artifacts
 # =========================
-artifacts/models/
-artifacts/pipelines/
-*.pkl
-*.joblib
-*.onnx
+
 
 # =========================
 # Logs
