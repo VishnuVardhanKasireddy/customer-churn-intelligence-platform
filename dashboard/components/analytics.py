@@ -1,8 +1,15 @@
 from pathlib import Path
 
 import pandas as pd
-import plotly.express as px
 import streamlit as st
+
+from components.charts import (
+    create_churn_distribution,
+    create_monthly_churn_trend,
+    create_orders_vs_spend_scatter,
+    create_recency_boxplot,
+    create_spend_distribution,
+)
 
 
 FEATURE_DATA_FILE = (
@@ -60,6 +67,7 @@ def render_customer_analytics():
 
     st.divider()
 
+    
     # Churn distribution
     st.markdown("### Churn Distribution")
 
@@ -71,16 +79,7 @@ def render_customer_analytics():
         .reset_index(name="customers")
     )
 
-    fig = px.bar(
-        churn_counts,
-        x="status",
-        y="customers",
-        title="Customer Snapshot Churn Distribution",
-        labels={
-            "status": "Customer Status",
-            "customers": "Snapshots",
-        },
-    )
+    fig = create_churn_distribution(churn_counts)
 
     st.plotly_chart(
         fig,
@@ -91,6 +90,7 @@ def render_customer_analytics():
     st.markdown("### Recency and Churn")
 
     recency_df = df.copy()
+
     recency_df["status"] = recency_df["churn"].map(
         {
             0: "Retained",
@@ -98,16 +98,7 @@ def render_customer_analytics():
         }
     )
 
-    fig = px.box(
-        recency_df,
-        x="status",
-        y="recency_days",
-        title="Recency Distribution by Churn Status",
-        labels={
-            "status": "Customer Status",
-            "recency_days": "Recency (days)",
-        },
-    )
+    fig = create_recency_boxplot(recency_df)
 
     st.plotly_chart(
         fig,
@@ -117,15 +108,7 @@ def render_customer_analytics():
     # Spend distribution
     st.markdown("### Customer Spending")
 
-    fig = px.histogram(
-        df,
-        x="total_spend",
-        nbins=50,
-        title="Customer Spend Distribution",
-        labels={
-            "total_spend": "Total Spend",
-        },
-    )
+    fig = create_spend_distribution(df)
 
     st.plotly_chart(
         fig,
@@ -147,23 +130,7 @@ def render_customer_analytics():
         }
     )
 
-    fig = px.scatter(
-        sample,
-        x="total_orders",
-        y="total_spend",
-        color="status",
-        hover_data=[
-            "recency_days",
-            "average_order_value",
-            "unique_products",
-        ],
-        title="Customer Orders vs Spending",
-        labels={
-            "total_orders": "Total Orders",
-            "total_spend": "Total Spend",
-            "status": "Status",
-        },
-    )
+    fig = create_orders_vs_spend_scatter(sample)
 
     st.plotly_chart(
         fig,
@@ -177,25 +144,12 @@ def render_customer_analytics():
         df.groupby("cutoff_date")["churn"]
         .mean()
         .reset_index()
+        .rename(columns={"churn": "churn_rate"})
     )
 
-    fig = px.line(
-        monthly_churn,
-        x="cutoff_date",
-        y="churn",
-        markers=True,
-        title="Churn Rate by Snapshot Date",
-        labels={
-            "cutoff_date": "Snapshot Date",
-            "churn": "Churn Rate",
-        },
-    )
-
-    fig.update_yaxes(
-        tickformat=".0%",
-    )
+    fig = create_monthly_churn_trend(monthly_churn)
 
     st.plotly_chart(
         fig,
         use_container_width=True,
-    )   
+    )
