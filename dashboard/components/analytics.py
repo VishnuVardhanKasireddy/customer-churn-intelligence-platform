@@ -105,15 +105,6 @@ def render_customer_analytics():
         use_container_width=True,
     )
 
-    # Spend distribution
-    st.markdown("### Customer Spending")
-
-    fig = create_spend_distribution(df)
-
-    st.plotly_chart(
-        fig,
-        use_container_width=True,
-    )
 
     # Orders vs spend
     st.markdown("### Orders vs Spend")
@@ -148,6 +139,16 @@ def render_customer_analytics():
     )
 
     fig = create_monthly_churn_trend(monthly_churn)
+
+    st.plotly_chart(
+        fig,
+        use_container_width=True,
+    )
+
+    # Spend distribution
+    st.markdown("### Customer Spending")
+
+    fig = create_spend_distribution(df)
 
     st.plotly_chart(
         fig,
