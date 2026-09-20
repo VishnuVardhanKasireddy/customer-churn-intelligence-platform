@@ -195,20 +195,13 @@ The final modeling dataset contains **20 behavioral features**.
 For each qualifying transaction, monetary value is calculated as:
 
 $$
-\text{TransactionValue}_i
-=
-\text{Quantity}_i
-\times
-\text{UnitPrice}_i
+\text{TransactionValue}_i = \text{Quantity}_i \times \text{UnitPrice}_i
 $$
 
 Customer-level spending is then obtained by aggregating transaction value over the observation window:
 
 $$
-\text{TotalSpend}_c
-=
-\sum_{i \in T_c}
-\text{TransactionValue}_i
+\text{TotalSpend}_c = \sum_{i \in T_c} \text{TransactionValue}_i
 $$
 
 where $T_c$ represents the qualifying transactions associated with customer $c$.
@@ -233,10 +226,7 @@ where $T_c$ represents the qualifying transactions associated with customer $c$.
 Average order value measures the average monetary value generated per order:
 
 $$
-\text{AOV}_c
-=
-\frac{\text{TotalSpend}_c}
-{\text{TotalOrders}_c}
+\text{AOV}_c = \frac{\text{TotalSpend}_c} {\text{TotalOrders}_c}
 $$
 
 This distinguishes customers who place many low-value orders from customers who place fewer high-value orders.
@@ -246,11 +236,7 @@ This distinguishes customers who place many low-value orders from customers who 
 Recency measures how recently a customer made a qualifying purchase relative to the snapshot date:
 
 $$
-\text{Recency}_c
-=
-t_{\text{snapshot}}
--
-t_{\text{last purchase},c}
+\text{Recency}_c = t_{\text{snapshot}} - t_{\text{last purchase},c}
 $$
 
 A larger recency value indicates that the customer has been inactive for a longer period.
@@ -272,11 +258,7 @@ $$
 The average interpurchase interval is:
 
 $$
-\text{AvgInterpurchase}_c
-=
-\frac{1}{n-1}
-\sum_{i=2}^{n}
-\Delta_i
+\text{AvgInterpurchase}_c = \frac{1}{n-1} \sum_{i=2}^{n} \Delta_i
 $$
 
 The median interpurchase interval is also retained because purchase intervals can be highly skewed by irregular customer behavior.
@@ -295,19 +277,13 @@ Short-term behavioral features are calculated over multiple rolling periods:
 For example:
 
 $$
-\text{Orders}_{30d,c}
-=
-\sum_{i \in W_{30}(c)}
-\mathbf{1}(\text{transaction}_i \text{ belongs to customer } c)
+\text{Orders}_{30d,c} = \sum_{i \in W_{30}(c)} \mathbf{1}(\text{transaction}_i \text{ belongs to customer } c)
 $$
 
 and:
 
 $$
-\text{Spend}_{90d,c}
-=
-\sum_{i \in W_{90}(c)}
-\text{TransactionValue}_i
+\text{Spend}_{90d,c} = \sum_{i \in W_{90}(c)} \text{TransactionValue}_i
 $$
 
 where $W_k(c)$ represents the customer's qualifying transactions within the previous $k$ days.
@@ -330,19 +306,13 @@ Order and spending trends are represented as ratios between the recent 90-day pe
 For orders:
 
 $$
-\text{OrderTrendRatio}_c
-=
-\frac{\text{Orders}_{90d,c}}
-{\max(1,\text{OrdersPrevious90d}_c)}
+\text{OrderTrendRatio}_c = \frac{\text{Orders}_{90d,c}} {\max(1,\text{OrdersPrevious90d}_c)}
 $$
 
 For spending:
 
 $$
-\text{SpendTrendRatio}_c
-=
-\frac{\text{Spend}_{90d,c}}
-{\max(1,\text{SpendPrevious90d}_c)}
+\text{SpendTrendRatio}_c = \frac{\text{Spend}_{90d,c}} {\max(1,\text{SpendPrevious90d}_c)}
 $$
 
 The denominator is protected against division by zero.
@@ -362,17 +332,13 @@ The pipeline follows strict temporal constraints:
 This separation ensures that:
 
 $$
-\text{Features}
-\leftarrow
-\text{Past Behavior}
+\text{Features} \leftarrow \text{Past Behavior}
 $$
 
 while:
 
 $$
-\text{Target}
-\leftarrow
-\text{Future Behavior}
+\text{Target} \leftarrow \text{Future Behavior}
 $$
 
 This temporal separation is essential for preventing target leakage in churn prediction.
@@ -497,11 +463,7 @@ Logistic Regression was used as the baseline classifier because it provides a si
 For binary classification, Logistic Regression estimates the probability of churn using the sigmoid function:
 
 $$
-P(y=1\mid x)
-=
-\sigma(z)
-=
-\frac{1}{1+e^{-z}}
+P(y=1\mid x) = \sigma(z) = \frac{1}{1+e^{-z}}
 $$
 
 where:
@@ -534,11 +496,7 @@ A Random Forest is an ensemble of decision trees. Each tree is trained using a b
 For an input $x$, the ensemble aggregates the predictions of individual trees:
 
 $$
-\hat{P}(y=1\mid x)
-=
-\frac{1}{B}
-\sum_{b=1}^{B}
-P_b(y=1\mid x)
+\hat{P}(y=1\mid x) = \frac{1}{B} \sum_{b=1}^{B} P_b(y=1\mid x)
 $$
 
 where $B$ is the number of trees and $P_b$ represents the probability estimate from tree $b$.
@@ -590,12 +548,7 @@ The Random Forest outputs a probability of churn rather than a direct binary cla
 For a predicted churn probability $p$ and threshold $t$:
 
 $$
-\hat{y}
-=
-\begin{cases}
-1 & \text{if } p \geq t \\
-0 & \text{otherwise}
-\end{cases}
+\hat{y} = \begin{cases} 1 & \text{if } p \geq t \\ 0 & \text{otherwise} \end{cases}
 $$
 
 Rather than using the conventional threshold of 0.50, multiple thresholds were evaluated on the validation set.
@@ -659,24 +612,15 @@ where rows represent the actual class and columns represent the predicted class.
 The corresponding classification metrics are derived from:
 
 $$
-\text{Precision}
-=
-\frac{TP}{TP+FP}
+\text{Precision} = \frac{TP}{TP+FP}
 $$
 
 $$
-\text{Recall}
-=
-\frac{TP}{TP+FN}
+\text{Recall} = \frac{TP}{TP+FN}
 $$
 
 $$
-\text{F1}
-=
-2
-\cdot
-\frac{\text{Precision}\cdot\text{Recall}}
-{\text{Precision}+\text{Recall}}
+\text{F1} = 2 \cdot \frac{\text{Precision}\cdot\text{Recall}} {\text{Precision}+\text{Recall}}
 $$
 
 The model achieves a recall of **86.30%**, identifying a large proportion of churned customer snapshots, while the precision of **57.43%** indicates that a meaningful proportion of predicted churn cases are false positives.
@@ -718,13 +662,7 @@ The final Random Forest ranks features based on their contribution to reducing i
 For a decision node $t$, the impurity decrease associated with a split can be expressed as:
 
 $$
-\Delta I
-=
-I(t)
--
-\frac{N_L}{N_t}I(L)
--
-\frac{N_R}{N_t}I(R)
+\Delta I = I(t) - \frac{N_L}{N_t}I(L) - \frac{N_R}{N_t}I(R)
 $$
 
 where:
@@ -898,12 +836,7 @@ The response contains three outputs:
 The predicted probability is converted into a binary classification using the threshold selected during validation:
 
 $$
-\hat{y}
-=
-\begin{cases}
-1 & \text{if } p \geq 0.45 \\
-0 & \text{otherwise}
-\end{cases}
+\hat{y} = \begin{cases} 1 & \text{if } p \geq 0.45 \\ 0 & \text{otherwise} \end{cases}
 $$
 
 where $p$ represents the predicted probability of churn.
